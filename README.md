@@ -42,3 +42,9 @@ To simulate a real-world enterprise environment where many operating systems (Wi
 - The `id` command confirms the user `hunter@corp.local` is recognized by the Linux system.
 
 ![Final Verification](INSERT_IMAGE_LINK_HERE)
+
+## 📚 References & Resources
+Project configuration was guided by standard documentation and the following resources:
+- **Windows Server Setup:** [Install Windows Server 2022 on Proxmox](https://www.youtube.com/watch?v=5A6pHU7f9n0)
+- **Active Directory Config:** [Creating an AD Domain](https://www.youtube.com/watch?v=yQtI8JdbNqM)
+- **Linux Integration:** [Red Hat Enterprise Linux - Integration with Active Directory](https://www.youtube.com/watch?v=CGt6oHZPToY)
