@@ -1,26 +1,28 @@
 # Enterprise Identity Lab: Hybrid AD, RADIUS (AAA), & Linux
 
 ## 🎯 Objective
-To design a centralized identity management system simulating a secure enterprise network. The project integrates **Active Directory** for user management, **Windows NPS (RADIUS)** for securing Wi-Fi infrastructure (Cisco), and **SSSD** for authenticating Linux servers against the domain.
+To design a centralized identity management system simulating a secure enterprise network. The project integrates **Active Directory** for user management, **Group Policy** for endpoint hardening, **Windows NPS (RADIUS)** for securing Wi-Fi infrastructure, and **SSSD** for authenticating Linux servers against the domain.
 
 ## 🛠 Skills Applied
-- **Network Security (AAA):** Configured **RADIUS/802.1X** using Windows Network Policy Server (NPS) to secure wireless access.
 - **Identity Management:** Deployed Windows Server 2022 Active Directory Domain Services (AD DS).
+- **Network Security (AAA):** Configured **RADIUS/802.1X** using Windows Network Policy Server (NPS) to secure Cisco wireless infrastructure.
+- **Security Baselines:** Implemented **Group Policy Objects (GPO)** to restrict user access to critical system settings (Control Panel).
 - **Hybrid Integration:** Bridged Red Hat Enterprise Linux (RHEL 9) systems to Windows AD using `realmd` and `sssd`.
-- **Infrastructure:** Managed virtualized assets (DC, Clients) via **Proxmox VE**.
 
 ## 💻 Technologies
 - **Server:** Windows Server 2022 (DC + NPS Roles)
-- **Client:** Rocky Linux 9
-- **Network Hardware:** Cisco AIR-AP2802 (RADIUS Client)
+- **Client:** Rocky Linux 9 (RHEL)
+- **Networking:** Cisco AIR-AP2802 (RADIUS Client)
 - **Protocol:** RADIUS (PEAP/MS-CHAPv2)
 
 ## 📝 Steps Performed
 
-### 1. Domain Controller & Identity Infrastructure
-- Deployed Windows Server 2022 on Proxmox.
-- Promoted server to Domain Controller (`corp.local`).
-- Created security groups and user accounts for testing authentication flows.
+### 1. Domain Controller & GPO Enforcement
+- Promoted Windows Server 2022 to Domain Controller (`corp.local`).
+- Created and **Linked** a Group Policy Object to the domain root to enforce security standards.
+- **Policy Configured:** "Prohibit access to Control Panel" (Enabled).
+
+![GPO Configuration](gpo_configuration.png)
 
 ### 2. RADIUS Server Configuration (NPS)
 - Installed the **Network Policy and Access Services** role.
@@ -36,6 +38,9 @@ To design a centralized identity management system simulating a secure enterpris
 - Verified centralized authentication by querying AD user attributes from the Linux terminal.
 
 ![Linux Integration Verification](linux_ad_integration.png)
+
+## 📂 Architecture Note
+This lab runs on a **Proxmox VE** hypervisor, demonstrating the ability to manage virtualized mixed-OS environments.
 
 ## 📚 References & Resources
 - **NPS Setup:** [Configure NPS for 802.1X Wireless](https://learn.microsoft.com/en-us/windows-server/networking/technologies/nps/nps-radius-server-8021x-wireless)
