@@ -1,50 +1,42 @@
-# Hybrid Active Directory Lab: Windows Server 2022 & RHEL 9 Integration
+# Enterprise Identity Lab: Hybrid AD, RADIUS (AAA), & Linux
 
 ## 🎯 Objective
-To simulate a real-world enterprise environment where many operating systems (Windows & Linux) must be managed centrally. The goal was to deploy a Domain Controller, enforce security policies, and enable Linux servers to authenticate against Active Directory.
+To design a centralized identity management system simulating a secure enterprise network. The project integrates **Active Directory** for user management, **Windows NPS (RADIUS)** for securing Wi-Fi infrastructure (Cisco), and **SSSD** for authenticating Linux servers against the domain.
 
-## 🛠 Skills Learned
-- **System Administration:** Windows Server 2022, Active Directory Domain Services (AD DS).
-- **Security:** Implementing Group Policy Objects (GPO) to harden endpoints.
-- **Integration:** Configuring SSSD and Realmd to join RHEL/Rocky Linux to a Windows domain.
-- **Virtualization:** Managing resources in Proxmox VE.
+## 🛠 Skills Applied
+- **Network Security (AAA):** Configured **RADIUS/802.1X** using Windows Network Policy Server (NPS) to secure wireless access.
+- **Identity Management:** Deployed Windows Server 2022 Active Directory Domain Services (AD DS).
+- **Hybrid Integration:** Bridged Red Hat Enterprise Linux (RHEL 9) systems to Windows AD using `realmd` and `sssd`.
+- **Infrastructure:** Managed virtualized assets (DC, Clients) via **Proxmox VE**.
 
 ## 💻 Technologies
-- Windows Server 2022 (Domain Controller)
-- Rocky Linux 9 (Client)
-- Proxmox VE (Hypervisor)
+- **Server:** Windows Server 2022 (DC + NPS Roles)
+- **Client:** Rocky Linux 9
+- **Network Hardware:** Cisco AIR-AP2802 (RADIUS Client)
+- **Protocol:** RADIUS (PEAP/MS-CHAPv2)
 
 ## 📝 Steps Performed
 
-### 1. Domain Controller Deployment
-- Installed Windows Server 2022 on Proxmox using VirtIO drivers for performance.
-- Promoted server to a **Domain Controller**, establishing the new forest `corp.local`.
-- Configured static IP and DNS settings to ensure stable connectivity.
+### 1. Domain Controller & Identity Infrastructure
+- Deployed Windows Server 2022 on Proxmox.
+- Promoted server to Domain Controller (`corp.local`).
+- Created security groups and user accounts for testing authentication flows.
 
-![Domain Controller Setup](INSERT_IMAGE_LINK_HERE)
+### 2. RADIUS Server Configuration (NPS)
+- Installed the **Network Policy and Access Services** role.
+- Configured the Cisco Wireless Access Point as a **RADIUS Client** using a shared secret.
+- Defined Network Policies to allow **PEAP-MSCHAPv2** authentication for the "Domain Users" group.
+- *Outcome:* Users can now log into the Enterprise Wi-Fi using their Active Directory credentials.
 
-### 2. Security Policy Configuration (GPO)
-- Created a dedicated Organizational Unit (OU) and User Accounts for testing.
-- Designed a "Block Control Panel" Group Policy Object (GPO) to restrict user access to system settings.
-- Verified policy application using `gpupdate /force`.
+![RADIUS Configuration](nps_radius_config.png)
 
-![GPO Configuration](INSERT_IMAGE_LINK_HERE)
+### 3. Linux Domain Integration
+- Configured RHEL 9 DNS to resolve to the Domain Controller.
+- Used `realmd` to join the Linux host to the Windows Domain.
+- Verified centralized authentication by querying AD user attributes from the Linux terminal.
 
-### 3. Linux Integration (The Bridge)
-- Configured Rocky Linux 9 networking to point to the Windows DC for DNS resolution.
-- Installed necessary packages: `realmd`, `sssd`, `oddjob`, `adcli`.
-- Successfully joined the Linux host to the domain using `realm join`.
-
-![Linux Join Command](INSERT_IMAGE_LINK_HERE)
-
-## 🏆 The Result
-- Successfully verified that a Windows Active Directory user could authenticate on the Linux server.
-- The `id` command confirms the user `hunter@corp.local` is recognized by the Linux system.
-
-![Final Verification](INSERT_IMAGE_LINK_HERE)
+![Linux Integration Verification](linux_ad_integration.png)
 
 ## 📚 References & Resources
-Project configuration was guided by standard documentation and the following resources:
-- **Windows Server Setup:** [Install Windows Server 2022 on Proxmox](https://www.youtube.com/watch?v=5A6pHU7f9n0)
-- **Active Directory Config:** [Creating an AD Domain](https://www.youtube.com/watch?v=yQtI8JdbNqM)
+- **NPS Setup:** [Configure NPS for 802.1X Wireless](https://learn.microsoft.com/en-us/windows-server/networking/technologies/nps/nps-radius-server-8021x-wireless)
 - **Linux Integration:** [Red Hat Enterprise Linux - Integration with Active Directory](https://www.youtube.com/watch?v=CGt6oHZPToY)
