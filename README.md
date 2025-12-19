@@ -1,4 +1,4 @@
-# Enterprise Identity Lab: Hybrid AD, RADIUS (AAA), & Linux
+# Enterprise Identity Lab: Hybrid AD, RADIUS, & Linux
 
 ## 🎯 Objective
 To design a centralized identity management system simulating a secure enterprise network. The project integrates **Active Directory** for user management, **Group Policy** for endpoint hardening, **Windows NPS (RADIUS)** for securing Wi-Fi infrastructure, and **SSSD** for authenticating Linux servers against the domain.
@@ -17,14 +17,21 @@ To design a centralized identity management system simulating a secure enterpris
 
 ## 📝 Steps Performed
 
-### 1. Domain Controller & GPO Enforcement
+### 1. Domain Controller Deployment
 - Promoted Windows Server 2022 to Domain Controller (`corp.local`).
+- Configured static networking and DNS services to support the forest infrastructure.
+- Validated AD DS role status via Server Manager.
+
+![Domain Controller Setup](domain_controller_setup.png)
+
+### 2. GPO Security Enforcement
 - Created and **Linked** a Group Policy Object to the domain root to enforce security standards.
 - **Policy Configured:** "Prohibit access to Control Panel" (Enabled).
+- Verified policy application to prevent unauthorized system changes.
 
 ![GPO Configuration](gpo_configuration.png)
 
-### 2. RADIUS Server Configuration (NPS)
+### 3. RADIUS Server Configuration (NPS)
 - Installed the **Network Policy and Access Services** role.
 - Configured the Cisco Wireless Access Point as a **RADIUS Client** using a shared secret.
 - Defined Network Policies to allow **PEAP-MSCHAPv2** authentication for the "Domain Users" group.
@@ -32,7 +39,7 @@ To design a centralized identity management system simulating a secure enterpris
 
 ![RADIUS Configuration](nps_radius_config.png)
 
-### 3. Linux Domain Integration
+### 4. Linux Domain Integration
 - Configured RHEL 9 DNS to resolve to the Domain Controller.
 - Used `realmd` to join the Linux host to the Windows Domain.
 - Verified centralized authentication by querying AD user attributes from the Linux terminal.
